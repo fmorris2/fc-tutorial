@@ -1,4 +1,4 @@
-package fctutorial;
+package scripts.fc.fctutorial;
 
 import java.util.Arrays;
 import java.util.LinkedList;
