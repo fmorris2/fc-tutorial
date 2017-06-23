@@ -31,7 +31,7 @@ public class ChopTree extends AnticipativeTask
 		if(Player.getAnimation() != -1)
 			return false;
 		
-		return Inventory.getCount("Logs") == 0 && (FCTutorial.getProgress() == 40 || FCTutorial.getProgress() == 50);
+		return Inventory.getCount("Logs") == 0 && (FCTutorial.getProgress() == 40/* || FCTutorial.getProgress() == 50*/);
 	}
 
 	@Override

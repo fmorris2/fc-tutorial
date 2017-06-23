@@ -34,7 +34,9 @@ public class SmeltOre extends AnticipativeTask implements PredictableInteraction
 	@Override
 	public EntityInteraction getInteractable()
 	{
-		return new ItemOnObject("Use", 10082, "Tin ore", 20);
+		EntityInteraction inter = new ItemOnObject("Use", 10082, "Tin ore", 20);
+		inter.setCheckPath(false);
+		return inter;
 	}
 
 	@Override

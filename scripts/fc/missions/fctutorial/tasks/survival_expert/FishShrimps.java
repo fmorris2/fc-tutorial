@@ -23,12 +23,15 @@ public class FishShrimps extends AnticipativeTask implements PredictableInteract
 	@Override
 	public boolean execute()
 	{
-		boolean success = getInteractable().execute();
+		if(getInteractable().execute())
+		{
+			if(FCTutorial.getProgress() == 80)
+				return Timing.waitCondition(FCConditions.inventoryChanged(Inventory.getAll().length), General.random(6000, 7500));
+			else
+				return FCTiming.waitCondition(() -> Player.getAnimation() == FISH_ANIM, 6500);
+		}
 		
-		if(FCTutorial.getProgress() == 80)
-			return Timing.waitCondition(FCConditions.inventoryChanged(Inventory.getAll().length), General.random(6000, 7500));
-		
-		return success;
+		return false;
 	}
 
 	@Override

@@ -15,7 +15,6 @@ public class ClickEmote extends Task
 	private static final long serialVersionUID = -892318255408849103L;
 	
 	private static final int INTERFACE_MASTER = 320;
-	private static final int INTERFACE_CHILD = General.random(1, 24);
 
 	@Override
 	public boolean execute()
@@ -39,7 +38,7 @@ public class ClickEmote extends Task
 	
 	private void doEmote()
 	{
-		RSInterface inter = Interfaces.get(INTERFACE_MASTER, INTERFACE_CHILD);
+		RSInterface inter = Interfaces.get(INTERFACE_MASTER, General.random(1, 24));
 		
 		if(Clicking.click(inter))
 			Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 187), 3000);
