@@ -14,6 +14,7 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.items.ItemOnItem;
@@ -25,6 +26,9 @@ import scripts.fc.missions.fctutorial.FCTutorial;
 public class LightFire extends Task implements PredictableInteraction
 {
 	private static final long serialVersionUID = 8317087202347142705L;
+	private static final int ESTIMATED_WAIT = 3500;
+	
+	private ABC2Reaction reaction = new ABC2Reaction(true, ESTIMATED_WAIT);
 	
 	@Override
 	public boolean execute()
@@ -65,10 +69,18 @@ public class LightFire extends Task implements PredictableInteraction
 			return false;
 		}
 		
-		if(getInteractable().execute() && Timing.waitCondition(FCConditions.animationChanged(-1), 3000)
-				&& Timing.waitCondition(FCConditions.animationChanged(733), 7500)
-				&& FCTiming.waitCondition(() -> FCTutorial.getProgress() > 50, 10000))
-			return true;
+		if(getInteractable().execute() && Timing.waitCondition(FCConditions.animationChanged(-1), 3000))
+		{
+			reaction.start();
+			boolean success = Timing.waitCondition(FCConditions.animationChanged(733), 7500) 
+					&& FCTiming.waitCondition(() -> FCTutorial.getProgress() > 50, 10000);
+			
+			//reaction time
+			if(success)
+				reaction.react();
+			
+			return success;
+		}
 		
 		return false;
 	}

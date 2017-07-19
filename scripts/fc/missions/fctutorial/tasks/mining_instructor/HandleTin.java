@@ -1,11 +1,16 @@
 package scripts.fc.missions.fctutorial.tasks.mining_instructor;
 
+import org.tribot.api.Timing;
+import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
+import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
+import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.task.AnticipativeTask;
 import scripts.fc.framework.task.PredictableInteraction;
 import scripts.fc.framework.task.Task;
@@ -15,13 +20,19 @@ import scripts.fc.missions.fctutorial.tasks.TutorialTask;
 public class HandleTin extends AnticipativeTask implements PredictableInteraction
 {
 	private static final long serialVersionUID = -4014208023321206656L;
+	private static final int ESTIMATED_WAIT = 3000;
 	
 	private int setting;
+	private ABC2Reaction reaction = new ABC2Reaction(true, ESTIMATED_WAIT);
 
 	@Override
 	public boolean execute()
 	{
-		return getInteractable().execute();
+		boolean success = getInteractable().execute();
+		if(success)
+			reaction.start();
+		
+		return success;
 	}
 
 	@Override
@@ -46,7 +57,8 @@ public class HandleTin extends AnticipativeTask implements PredictableInteractio
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 6000);
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 6000))
+			reaction.react();
 	}
 
 	@Override

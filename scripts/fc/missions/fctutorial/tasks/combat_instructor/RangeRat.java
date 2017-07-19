@@ -12,6 +12,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.impl.npcs.AttackNpc;
 import scripts.fc.api.wrappers.FCTiming;
@@ -23,12 +24,18 @@ public class RangeRat extends Task
 	private static final long serialVersionUID = -6634211527227299511L;
 	private static final List<Positionable> OPEN_TILES = Arrays.asList(new RSTile(3106, 9510, 0), new RSTile(3107, 9511, 0),
 			new RSTile(3107, 9512, 0), new RSTile(3109, 9513, 0));
+	private static final int ESTIMATED_WAIT = 10000;
+	
+	private ABC2Reaction reaction = new ABC2Reaction(false, ESTIMATED_WAIT);
 
 	@Override
 	public boolean execute()
 	{
 		if(Player.getRSPlayer().getInteractingCharacter() != null)
-			return true;
+		{
+			reaction.start();
+			return waitForKill();
+		}
 		
 		if(!OPEN_TILES.contains(Player.getPosition()))
 		{
@@ -45,12 +52,23 @@ public class RangeRat extends Task
 			attack.setCheckPath(false);
 			
 			if(attack.execute() && Timing.waitCondition(FCConditions.IN_COMBAT_CONDITION, 3000))
-				return Timing.waitCondition(FCConditions.KILL_CONDITION, 30000);
+				return waitForKill();
 		}
 		
 		return !shouldExecute();
 	}
-
+	
+	private boolean waitForKill()
+	{
+		reaction.start();
+		
+		boolean success = Timing.waitCondition(FCConditions.KILL_CONDITION, 30000);
+		if(success)
+			reaction.react();
+		
+		return success;
+	}
+	
 	@Override
 	public boolean shouldExecute()
 	{

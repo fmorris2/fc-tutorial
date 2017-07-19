@@ -19,6 +19,7 @@ public class FishShrimps extends AnticipativeTask implements PredictableInteract
 {
 	private static final long serialVersionUID = -6769017398897731224L;
 	private static final int FISH_ANIM = 621;
+	
 
 	@Override
 	public boolean execute()

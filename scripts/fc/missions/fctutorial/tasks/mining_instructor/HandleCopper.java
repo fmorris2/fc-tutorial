@@ -3,6 +3,7 @@ package scripts.fc.missions.fctutorial.tasks.mining_instructor;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
@@ -15,13 +16,19 @@ import scripts.fc.missions.fctutorial.tasks.TutorialTask;
 public class HandleCopper extends AnticipativeTask implements PredictableInteraction
 {
 	private static final long serialVersionUID = 297434712529988827L;
+	private static final int ESTIMATED_WAIT = 3000;
 	
 	private int setting;
+	private ABC2Reaction reaction = new ABC2Reaction(true, ESTIMATED_WAIT);
 
 	@Override
 	public boolean execute()
 	{
-		return getInteractable().execute();
+		boolean success = getInteractable().execute();
+		if(success)
+			reaction.start();
+		
+		return success;
 	}
 
 	@Override
@@ -52,8 +59,9 @@ public class HandleCopper extends AnticipativeTask implements PredictableInterac
 
 	@Override
 	public void waitForTaskComplete()
-	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 6000);
+	{	
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 6000))
+			reaction.react();
 	}
 
 }
