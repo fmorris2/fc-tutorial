@@ -5,6 +5,7 @@ import org.tribot.api.Timing;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api2007.Banking;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.utils.InterfaceUtils;
@@ -15,16 +16,23 @@ public class PollBooth extends Task
 {
 	private static final long serialVersionUID = 1240933668596100934L;
 
+	private ABC2Reaction reaction = new ABC2Reaction(true, 2400);
+	
 	@Override
 	public boolean execute()
 	{
-		if(Banking.close() && new ClickObject("Use", "Poll booth", 15).execute() && Timing.waitCondition(FCConditions.IN_DIALOGUE_CONDITION, 3500))
+		if(Banking.close() && new ClickObject("Use", "Poll booth", 15).execute())
 		{	
-			while(InterfaceUtils.findContainingText("Content Poll #") == null)
+			reaction.start();
+			if(Timing.waitCondition(FCConditions.IN_DIALOGUE_CONDITION, 3500))
 			{
-				Keyboard.holdKey(' ', Keyboard.getKeyCode(' '), FCConditions.SPACEBAR_HOLD);
-				General.sleep(10);
-			}	
+				reaction.react();
+				while(InterfaceUtils.findContainingText("Content Poll #") == null)
+				{
+					Keyboard.holdKey(' ', Keyboard.getKeyCode(' '), FCConditions.SPACEBAR_HOLD);
+					General.sleep(10);
+				}
+			}
 		}
 		
 		return false;

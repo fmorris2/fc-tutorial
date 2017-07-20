@@ -3,6 +3,7 @@ package scripts.fc.missions.fctutorial.tasks.master_chef;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
@@ -16,10 +17,18 @@ public class MasterChefDoor extends AnticipativeTask implements PredictableInter
 {
 	private static final long serialVersionUID = -1221964821671959304L;
 
+	private ABC2Reaction reaction = new ABC2Reaction(false, 3500);
+	
 	@Override
 	public boolean execute()
 	{
-		return getInteractable().execute();
+		if(getInteractable().execute())
+		{
+			reaction.start();
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -49,7 +58,8 @@ public class MasterChefDoor extends AnticipativeTask implements PredictableInter
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 7500);
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 7500))
+			reaction.react();
 	}
 
 }

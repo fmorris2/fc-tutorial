@@ -5,6 +5,7 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.npcs.ClickNpc;
@@ -20,19 +21,26 @@ public class FishShrimps extends AnticipativeTask implements PredictableInteract
 	private static final long serialVersionUID = -6769017398897731224L;
 	private static final int FISH_ANIM = 621;
 	
+	private ABC2Reaction reaction = new ABC2Reaction(true, 2500);
+	
 
 	@Override
 	public boolean execute()
 	{
+		boolean success = false;
 		if(getInteractable().execute())
 		{
+			reaction.start();
 			if(FCTutorial.getProgress() == 80)
-				return Timing.waitCondition(FCConditions.inventoryChanged(Inventory.getAll().length), General.random(6000, 7500));
+			{
+				success = Timing.waitCondition(FCConditions.inventoryChanged(Inventory.getAll().length), General.random(6000, 7500));
+				reaction.react();
+			}
 			else
-				return FCTiming.waitCondition(() -> Player.getAnimation() == FISH_ANIM, 6500);
+				success = FCTiming.waitCondition(() -> Player.getAnimation() == FISH_ANIM, 6500);
 		}
 		
-		return false;
+		return success;
 	}
 
 	@Override
@@ -65,7 +73,8 @@ public class FishShrimps extends AnticipativeTask implements PredictableInteract
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 6000);
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 6000))
+			reaction.react();
 	}
 	
 }

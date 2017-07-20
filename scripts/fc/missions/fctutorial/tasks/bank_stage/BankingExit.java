@@ -7,6 +7,7 @@ import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.utils.InterfaceUtils;
@@ -20,6 +21,8 @@ public class BankingExit extends AnticipativeTask
 	private static final long serialVersionUID = 2085896203169675974L;
 	private static final Positionable EXIT_DOOR_TILE = new RSTile(3125, 3124, 0);
 	
+	private ABC2Reaction reaction = new ABC2Reaction(false, 2400);
+	
 	@Override
 	public boolean execute()
 	{
@@ -28,8 +31,10 @@ public class BankingExit extends AnticipativeTask
 		if(InterfaceUtils.findContainingText("Content Poll #") != null)
 			Walking.blindWalkTo(objs[0]);
 		else if(objs.length > 0 && new ClickObject("Open", objs[0]).execute())
+		{
+			reaction.start();
 			return true;
-		
+		}
 		return false;
 	}
 
@@ -54,7 +59,8 @@ public class BankingExit extends AnticipativeTask
 	@Override
 	public void waitForTaskComplete()
 	{
-		Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 525), 3500);
+		if(Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 525), 3500))
+			reaction.react();
 	}
 
 }

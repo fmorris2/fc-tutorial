@@ -5,6 +5,7 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ItemOnObject;
@@ -20,6 +21,7 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 	private static final long serialVersionUID = 6159860992107728108L;
 	
 	private boolean firstShrimp;
+	private ABC2Reaction reaction = new ABC2Reaction(true, 2500);
 
 	@Override
 	public boolean execute()
@@ -27,13 +29,27 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 		if(FCTutorial.getProgress() == 90)
 		{
 			firstShrimp = true;
-			return getInteractable().execute() 
-					&& Timing.waitCondition(FCConditions.animationChanged(-1), 6500)
-					&& Timing.waitCondition(FCConditions.inventoryContains("Burnt shrimp"), 6500);
+			boolean success = getInteractable().execute();
+			reaction.start();
+			
+			if(success && Timing.waitCondition(FCConditions.animationChanged(-1), 6500)
+					&& Timing.waitCondition(FCConditions.inventoryContains("Burnt shrimp"), 6500))
+			{
+				reaction.react();
+				return true;
+			}
+			
+			return false;
 		}
 		
 		firstShrimp = false;
-		return getInteractable().execute();
+		if(getInteractable().execute())
+		{
+			reaction.start();
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -66,7 +82,8 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> Player.getAnimation() == -1, 6000);
+		if(FCTiming.waitCondition(() -> Player.getAnimation() == -1, 6000))
+			reaction.react();
 	}
 
 }

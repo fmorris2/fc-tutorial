@@ -2,6 +2,7 @@ package scripts.fc.missions.fctutorial.tasks.quest_guide;
 
 import org.tribot.api.Timing;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.framework.task.Task;
@@ -11,12 +12,20 @@ public class QuestGuideLadder extends Task
 {
 	private static final long serialVersionUID = -1878757915046483345L;
 
+	private ABC2Reaction reaction = new ABC2Reaction(true, 2400);
+	
 	@Override
 	public boolean execute()
 	{
 		if(new ClickObject("Climb-down", "Ladder", 15).execute())
-			Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 250), 5000);
-		
+		{
+			reaction.start();
+			if(Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 250), 5000))
+			{
+				reaction.react();
+				return true;
+			}
+		}
 		return false;
 	}
 

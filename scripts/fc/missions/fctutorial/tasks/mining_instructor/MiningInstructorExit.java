@@ -2,6 +2,7 @@ package scripts.fc.missions.fctutorial.tasks.mining_instructor;
 
 import org.tribot.api2007.Player;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
@@ -15,11 +16,16 @@ public class MiningInstructorExit extends AnticipativeTask implements Predictabl
 {
 	private static final long serialVersionUID = -6631125048389989843L;
 
+	private ABC2Reaction reaction = new ABC2Reaction(false, 4000);
+	
 	@Override
 	public boolean execute()
 	{
 		if(getInteractable().execute())
+		{
+			reaction.start();
 			return true;
+		}
 		
 		return !shouldExecute();
 	}
@@ -51,7 +57,8 @@ public class MiningInstructorExit extends AnticipativeTask implements Predictabl
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute() || !Player.isMoving(), 6000);
+		if(FCTiming.waitCondition(() -> !shouldExecute() || !Player.isMoving(), 6000))
+			reaction.react();
 	}
 
 }

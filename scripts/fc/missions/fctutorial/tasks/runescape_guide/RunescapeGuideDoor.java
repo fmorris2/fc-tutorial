@@ -3,6 +3,7 @@ package scripts.fc.missions.fctutorial.tasks.runescape_guide;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
@@ -16,10 +17,18 @@ public class RunescapeGuideDoor extends AnticipativeTask implements PredictableI
 {
 	private static final long serialVersionUID = 3157225351510368011L;
 
+	private ABC2Reaction reaction = new ABC2Reaction(true, 2500);
+	
 	@Override
 	public boolean execute()
 	{
-		return getInteractable().execute();
+		if(getInteractable().execute())
+		{
+			reaction.start();
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -49,7 +58,8 @@ public class RunescapeGuideDoor extends AnticipativeTask implements PredictableI
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 6000);
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 6000))
+			reaction.react();
 	}
 
 }

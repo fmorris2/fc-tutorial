@@ -5,6 +5,7 @@ import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
@@ -19,12 +20,21 @@ public class ClickAnvil extends Task implements PredictableInteraction
 	public static final int INTERFACE_MASTER = 312;
 	
 	private static final RSArea ANVIL_AREA = new RSArea(new RSTile(3082, 9501, 0), new RSTile(3085, 9495, 0));
+	
+	private ABC2Reaction reaction = new ABC2Reaction(false, 3000);
 
 	@Override
 	public boolean execute()
 	{
 		if(getInteractable().execute())
-			Timing.waitCondition(FCConditions.interfaceUp(INTERFACE_MASTER), 5000);
+		{
+			reaction.start();
+			if(Timing.waitCondition(FCConditions.interfaceUp(INTERFACE_MASTER), 5000))
+			{
+				reaction.react();
+				return true;
+			}
+		}
 		
 		return false;
 	}

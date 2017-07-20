@@ -1,5 +1,6 @@
 package scripts.fc.missions.fctutorial.tasks.mining_instructor;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ItemOnObject;
 import scripts.fc.api.wrappers.FCTiming;
@@ -12,11 +13,19 @@ import scripts.fc.missions.fctutorial.tasks.TutorialTask;
 public class SmeltOre extends AnticipativeTask implements PredictableInteraction
 {
 	private static final long serialVersionUID = -8822531871057467898L;
+	
+	private ABC2Reaction reaction = new ABC2Reaction(false, 3500);
 
 	@Override
 	public boolean execute()
 	{
-		return getInteractable().execute();
+		if(getInteractable().execute())
+		{
+			reaction.start();
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -48,7 +57,8 @@ public class SmeltOre extends AnticipativeTask implements PredictableInteraction
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 6000);
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 6000))
+			reaction.react();
 	}
 
 }

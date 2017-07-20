@@ -4,6 +4,7 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
@@ -14,13 +15,18 @@ import scripts.fc.missions.fctutorial.FCTutorial;
 public class FinancialAdvisorExit extends Task implements PredictableInteraction
 {
 	private static final long serialVersionUID = 2230767898462128069L;
-
+	
+	private ABC2Reaction reaction = new ABC2Reaction(true, 1200);
+	
 	@Override
 	public boolean execute()
 	{
 		if(getInteractable().execute())
-			Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 540), 3500);
-		
+		{
+			reaction.start();
+			if(Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 540), 3500))
+				reaction.react();
+		}
 		return false;
 	}
 

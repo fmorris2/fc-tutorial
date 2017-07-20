@@ -14,6 +14,7 @@ import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
 import scripts.fc.api.interaction.impl.npcs.ClickNpc;
 import scripts.fc.framework.task.AnticipativeTask;
@@ -28,6 +29,8 @@ public class CastWindStrike extends AnticipativeTask
 	private static final RSArea CAST_AREA = new RSArea(new RSTile(3140, 3090, 0), 1);
 	private static final int MAGIC_INTER_MASTER = 218;
 	private static final int SPELL_CHILD = 2;
+	
+	private ABC2Reaction reaction = new ABC2Reaction(true, 2000);
 
 	@Override
 	public boolean execute()
@@ -50,7 +53,10 @@ public class CastWindStrike extends AnticipativeTask
 			if(Game.isUptext("Wind"))
 			{
 				if(new ClickNpc("Cast Wind Strike ->", "Chicken", 15).execute())
+				{
+					reaction.start();
 					return true;
+				}
 			}
 			else
 			{
@@ -88,7 +94,8 @@ public class CastWindStrike extends AnticipativeTask
 	@Override
 	public void waitForTaskComplete()
 	{
-		Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 650), 2500);
+		if(Timing.waitCondition(FCConditions.settingNotEqualsCondition(FCTutorial.PROGRESS_SETTING, 650), 2500))
+			reaction.react();
 	}
 
 }

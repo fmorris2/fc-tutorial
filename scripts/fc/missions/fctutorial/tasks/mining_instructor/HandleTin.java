@@ -1,16 +1,12 @@
 package scripts.fc.missions.fctutorial.tasks.mining_instructor;
 
-import org.tribot.api.Timing;
-import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.abc.ABC2Reaction;
-import scripts.fc.api.abc.PersistantABCUtil;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
-import scripts.fc.framework.data.Vars;
 import scripts.fc.framework.task.AnticipativeTask;
 import scripts.fc.framework.task.PredictableInteraction;
 import scripts.fc.framework.task.Task;

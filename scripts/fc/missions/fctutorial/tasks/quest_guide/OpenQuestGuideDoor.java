@@ -8,6 +8,7 @@ import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
+import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.task.AnticipativeTask;
@@ -23,6 +24,7 @@ public class OpenQuestGuideDoor extends AnticipativeTask
 	private static final int FAILURE_THRESH = 5;
 	
 	private int failures;
+	private ABC2Reaction reaction = new ABC2Reaction(false, 3500);
 
 	@Override
 	public boolean execute()
@@ -30,7 +32,10 @@ public class OpenQuestGuideDoor extends AnticipativeTask
 		if(failures > FAILURE_THRESH && Player.getPosition().distanceTo(DOOR_TILE) > 8)
 			Walking.blindWalkTo(DOOR_TILE);
 		else if(new ClickObject("Open", "Door", new RSArea(new RSTile(3084, 3128, 0), new RSTile(3088, 3123, 0))).execute())
+		{
+			reaction.start();
 			return true;
+		}
 		else
 		{
 			failures++;
@@ -62,7 +67,8 @@ public class OpenQuestGuideDoor extends AnticipativeTask
 	@Override
 	public void waitForTaskComplete()
 	{
-		FCTiming.waitCondition(() -> !shouldExecute(), 6000);
+		if(FCTiming.waitCondition(() -> !shouldExecute(), 6000))
+			reaction.react();
 	}
 
 }
