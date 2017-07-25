@@ -13,9 +13,9 @@ public class MasterChefDialogue extends Task implements PredictableInteraction
 	@Override
 	public boolean execute()
 	{
-		getInteractable().execute();
-		
-		return false;
+		NpcDialogue inter = (NpcDialogue)getInteractable();
+		inter.setCheckPath(true);
+		return inter.execute();
 	}
 
 	@Override
