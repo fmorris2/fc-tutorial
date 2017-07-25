@@ -34,7 +34,9 @@ public class FinancialAdvisorDialogue extends AnticipativeTask implements Predic
 	@Override
 	public EntityInteraction getInteractable()
 	{
-		return new NpcDialogue("Talk-to", "Financial Advisor", 15, false, 0);
+		NpcDialogue dialogue = new NpcDialogue("Talk-to", "Financial Advisor", 15, false, 0);
+		dialogue.setCheckPath(true);
+		return dialogue;
 	}
 
 	@Override
