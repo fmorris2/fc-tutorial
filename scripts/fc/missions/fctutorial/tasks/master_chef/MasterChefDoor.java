@@ -46,7 +46,9 @@ public class MasterChefDoor extends AnticipativeTask implements PredictableInter
 	@Override
 	public EntityInteraction getInteractable()
 	{
-		return new ClickObject("Open", "Door", new RSArea(new RSTile(3077, 3086, 0), new RSTile(3080, 3083, 0)));
+		ClickObject clickObj = new ClickObject("Open", "Door", new RSArea(new RSTile(3077, 3086, 0), new RSTile(3080, 3083, 0)));
+		clickObj.setCheckPath(true);
+		return clickObj;
 	}
 
 	@Override
