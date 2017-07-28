@@ -2,10 +2,9 @@ package scripts.fc.missions.fctutorial.tasks.magic_instructor;
 
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
-import org.tribot.api2007.util.DPathNavigator;
 
+import scripts.fc.api.travel.Travel;
 import scripts.fc.framework.task.Task;
 import scripts.fc.missions.fctutorial.FCTutorial;
 
@@ -18,11 +17,7 @@ public class WalkToMagicInstructor extends Task
 	@Override
 	public boolean execute()
 	{
-		DPathNavigator dPath = new DPathNavigator();
-		dPath.overrideDoorCache(true, new RSObject[0]);
-		dPath.traverse(TARGET);
-		
-		return false;
+		return Travel.webWalkTo(TARGET);
 	}
 
 	@Override

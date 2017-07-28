@@ -1,11 +1,15 @@
 package scripts.fc.missions.fctutorial.tasks.combat_instructor;
 
 import org.tribot.api.Clicking;
+import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Interfaces;
+import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.types.RSInterface;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.npcs.dialogue.NpcDialogue;
+import scripts.fc.api.travel.Travel;
 import scripts.fc.framework.task.PredictableInteraction;
 import scripts.fc.framework.task.Task;
 import scripts.fc.missions.fctutorial.FCTutorial;
@@ -13,6 +17,7 @@ import scripts.fc.missions.fctutorial.FCTutorial;
 public class CombatInstructorDialogue extends Task implements PredictableInteraction
 {
 	private static final long serialVersionUID = -8348433102917902057L;
+	private static final Positionable TILE = new RSTile(3109, 9512, 0);
 
 	@Override
 	public boolean execute()
@@ -23,9 +28,14 @@ public class CombatInstructorDialogue extends Task implements PredictableInterac
 		if(closeButton != null)
 			Clicking.click(closeButton);
 		
-		NpcDialogue dialogue = (NpcDialogue)getInteractable();
-		dialogue.setCheckPath(true);
-		dialogue.execute();
+		if(!PathFinding.canReach(TILE, false))
+			Travel.webWalkTo(TILE);
+		else
+		{
+			NpcDialogue dialogue = (NpcDialogue)getInteractable();
+			dialogue.setCheckPath(true);
+			dialogue.execute();
+		}
 		
 		return false;
 	}
