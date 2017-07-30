@@ -26,7 +26,7 @@ public class BankerDialogue extends Task
 			if(Player.getPosition().distanceTo(DIALOGUE_TILE) > 2)
 				new DPathNavigator().traverse(DIALOGUE_TILE);
 			else
-				new NpcDialogue("Talk-to", "Banker", 25, 0).execute();
+				new NpcDialogue("Talk-to", "Banker", 25, 0).dontCheckPath().execute();
 		}
 		
 		return false;
