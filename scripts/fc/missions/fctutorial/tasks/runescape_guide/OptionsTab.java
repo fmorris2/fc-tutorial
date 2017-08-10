@@ -15,8 +15,11 @@ public class OptionsTab extends Task
 	public boolean execute()
 	{
 		if(GameTab.open(TABS.OPTIONS))
+		{
 			Utils.removeRoofs();
-
+			Utils.turnSoundDown();
+		}
+		
 		return false;
 	}
 
