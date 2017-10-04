@@ -11,6 +11,7 @@ import scripts.fc.api.interaction.impl.objects.ClickObject;
 import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.framework.task.Task;
 import scripts.fc.missions.fctutorial.FCTutorial;
+import scripts.fc.missions.fctutorial.tasks.TutorialTask;
 
 public class PollBooth extends Task
 {
@@ -27,7 +28,7 @@ public class PollBooth extends Task
 			if(Timing.waitCondition(FCConditions.IN_DIALOGUE_CONDITION, 3500))
 			{
 				reaction.react();
-				while(InterfaceUtils.findContainingText("Content Poll #") == null)
+				while(InterfaceUtils.findContainingText("When you're ready, move on through the door indicated") == null && !TutorialTask.BANKING_EXIT.TASK.shouldExecute())
 				{
 					Keyboard.holdKey(' ', Keyboard.getKeyCode(' '), FCConditions.SPACEBAR_HOLD);
 					General.sleep(10);

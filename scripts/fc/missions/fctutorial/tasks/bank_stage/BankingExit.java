@@ -28,7 +28,7 @@ public class BankingExit extends AnticipativeTask
 	{
 		RSObject[] objs = Objects.getAt(EXIT_DOOR_TILE);
 		
-		if(InterfaceUtils.findContainingText("Content Poll #") != null)
+		if(InterfaceUtils.findContainingText("Question 1") != null)
 			Walking.blindWalkTo(objs[0]);
 		else if(objs.length > 0 && new ClickObject("Open", objs[0]).execute())
 		{
@@ -41,7 +41,9 @@ public class BankingExit extends AnticipativeTask
 	@Override
 	public boolean shouldExecute()
 	{
-		return FCTutorial.getProgress() == 525;
+		return FCTutorial.getProgress() == 525 || 
+				(FCTutorial.getProgress() == 520 
+					&& InterfaceUtils.findContainingText("When you're ready, move on through the door indicated") != null);
 	}
 
 	@Override
