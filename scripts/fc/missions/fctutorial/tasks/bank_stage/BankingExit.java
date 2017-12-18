@@ -3,6 +3,7 @@ package scripts.fc.missions.fctutorial.tasks.bank_stage;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Objects;
+import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
@@ -28,9 +29,9 @@ public class BankingExit extends AnticipativeTask
 	{
 		RSObject[] objs = Objects.getAt(EXIT_DOOR_TILE);
 		
-		if(InterfaceUtils.findContainingText("Question 1") != null)
+		if(Player.getPosition().distanceTo(EXIT_DOOR_TILE) > 3)
 			Walking.blindWalkTo(objs[0]);
-		else if(objs.length > 0 && new ClickObject("Open", objs[0]).execute())
+		if(objs.length > 0 && new ClickObject("Open", objs[0]).execute())
 		{
 			reaction.start();
 			return true;
