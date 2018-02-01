@@ -43,7 +43,8 @@ public class MiningInstructorDialogue extends AnticipativeTask implements Predic
 	public boolean shouldExecute()
 	{
 		final int SETTING = FCTutorial.getProgress();
-		return SETTING == 260 || SETTING == 290 || SETTING == 330;
+		return SETTING == 260 || SETTING == 290
+				|| SETTING == 291|| SETTING == 330;
 	}
 
 	@Override

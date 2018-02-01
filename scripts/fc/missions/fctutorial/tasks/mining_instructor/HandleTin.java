@@ -6,6 +6,7 @@ import org.tribot.api2007.types.RSTile;
 import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.interaction.EntityInteraction;
 import scripts.fc.api.interaction.impl.objects.ClickObject;
+import scripts.fc.api.utils.InterfaceUtils;
 import scripts.fc.api.wrappers.FCTiming;
 import scripts.fc.framework.task.AnticipativeTask;
 import scripts.fc.framework.task.PredictableInteraction;
@@ -17,6 +18,7 @@ public class HandleTin extends AnticipativeTask implements PredictableInteractio
 {
 	private static final long serialVersionUID = -4014208023321206656L;
 	private static final int ESTIMATED_WAIT = 3000;
+	private static final String CHATBOX_INTER_MSG = "So now you know there's copper in the brown rocks,";
 	
 	private int setting;
 	private ABC2Reaction reaction = new ABC2Reaction(true, ESTIMATED_WAIT);
@@ -35,13 +37,17 @@ public class HandleTin extends AnticipativeTask implements PredictableInteractio
 	public boolean shouldExecute()
 	{
 		setting = FCTutorial.getProgress();
-		return setting == 270 || setting == 300;
+		return shouldProspect() || setting == 300;
+	}
+	
+	private boolean shouldProspect() {
+		return setting == 270 || InterfaceUtils.findContainingText(CHATBOX_INTER_MSG) != null;
 	}
 
 	@Override
 	public String getStatus()
 	{
-		return setting == 270 ? "Prospect tin" : "Mine tin";
+		return shouldProspect() ? "Prospect tin" : "Mine tin";
 	}
 
 	@Override
@@ -60,7 +66,7 @@ public class HandleTin extends AnticipativeTask implements PredictableInteractio
 	@Override
 	public EntityInteraction getInteractable()
 	{
-		return new ClickObject((setting <= 270 ? "Prospect" : "Mine"), "Rocks", new RSArea(new RSTile(3072, 9512, 0), new RSTile(3078, 9500, 0)));
+		return new ClickObject((shouldProspect() ? "Prospect" : "Mine"), "Rocks", new RSArea(new RSTile(3072, 9512, 0), new RSTile(3078, 9500, 0)));
 	}
 
 }

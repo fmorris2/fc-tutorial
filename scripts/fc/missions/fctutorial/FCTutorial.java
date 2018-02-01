@@ -2,6 +2,8 @@ package scripts.fc.missions.fctutorial;
 
 import java.util.LinkedList;
 
+import org.tribot.api.General;
+import org.tribot.api.Timing;
 import org.tribot.api2007.Game;
 
 import scripts.fc.framework.mission.Mission;
@@ -12,6 +14,9 @@ import scripts.fc.missions.fctutorial.tasks.TutorialTask;
 
 public class FCTutorial extends MissionManager implements Mission
 {
+	private static final long SETTING_PRINT_THRESHOLD = 5000;
+	private long lastSettingPrint;
+	
 	public FCTutorial(FCMissionScript script)
 	{
 		super(script);
@@ -57,6 +62,11 @@ public class FCTutorial extends MissionManager implements Mission
 	@Override
 	public void execute()
 	{
+		if(Timing.timeFromMark(lastSettingPrint) > SETTING_PRINT_THRESHOLD) {
+			General.println("Current setting: " + getProgress());
+			lastSettingPrint = Timing.currentTimeMillis();
+		}
+		
 		executeTasks();
 	}
 

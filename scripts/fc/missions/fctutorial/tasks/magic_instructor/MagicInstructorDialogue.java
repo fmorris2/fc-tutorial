@@ -37,7 +37,7 @@ public class MagicInstructorDialogue extends Task implements PredictableInteract
 	@Override
 	public EntityInteraction getInteractable()
 	{
-		NpcDialogue n = new NpcDialogue("Talk-to", "Magic Instructor", 30, 0);
+		NpcDialogue n = new NpcDialogue("Talk-to", "Magic Instructor", 30, 0,1);
 		n.setWalkToPos(false);
 		n.setCheckPath(false);
 		
