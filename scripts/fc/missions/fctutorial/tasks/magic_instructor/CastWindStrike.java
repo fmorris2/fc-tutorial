@@ -1,6 +1,11 @@
 package scripts.fc.missions.fctutorial.tasks.magic_instructor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.tribot.api.Clicking;
+import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.Camera;
@@ -10,7 +15,6 @@ import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
-import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSTile;
 
@@ -26,7 +30,10 @@ public class CastWindStrike extends AnticipativeTask
 {
 	private static final long serialVersionUID = -6873472290393042208L;
 	
-	private static final RSArea CAST_AREA = new RSArea(new RSTile(3140, 3090, 0), 1);
+	private static final List<RSTile> CAST_TILES = new ArrayList<>(Arrays.asList(
+		new RSTile(3138,3091,0), new RSTile(3139,3091,0), new RSTile(3140,3091,0)
+	));
+	
 	private static final int MAGIC_INTER_MASTER = 218;
 	private static final int SPELL_CHILD = 2;
 	
@@ -35,9 +42,9 @@ public class CastWindStrike extends AnticipativeTask
 	@Override
 	public boolean execute()
 	{
-		if(!CAST_AREA.contains(Player.getPosition()))
+		if(!CAST_TILES.contains(Player.getPosition()))
 		{
-			RSTile t = CAST_AREA.getRandomTile();
+			RSTile t = CAST_TILES.get(General.random(0, CAST_TILES.size() - 1));
 			
 			if(!t.isOnScreen())
 				Camera.turnToTile(t);
@@ -46,9 +53,9 @@ public class CastWindStrike extends AnticipativeTask
 				Mouse.click(1);
 			
 			if(Walking.walkScreenPath(Walking.generateStraightScreenPath(t)))
-					Timing.waitCondition(FCConditions.inAreaCondition(CAST_AREA), 3500);
+					Timing.waitCondition(FCConditions.positionEquals(t), 3500);
 		}
-		else if(CAST_AREA.contains(Player.getPosition()))
+		else if(CAST_TILES.contains(Player.getPosition()))
 		{
 			if(Game.isUptext("Wind"))
 			{
