@@ -1,7 +1,8 @@
 package scripts.fc.missions.fctutorial.tasks.survival_expert;
 
 import org.tribot.api.Clicking;
-import org.tribot.api.input.Mouse;
+import org.tribot.api2007.GameTab;
+import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.types.RSInterface;
 
 import scripts.fc.api.utils.InterfaceUtils;
@@ -20,9 +21,7 @@ public class InventoryTab extends Task
 			Clicking.click(clickToCont);
 		
 		
-		Mouse.clickBox(632, 170, 651, 192, 1);
-		
-		return false;
+		return GameTab.open(TABS.INVENTORY);
 	}
 
 	@Override
