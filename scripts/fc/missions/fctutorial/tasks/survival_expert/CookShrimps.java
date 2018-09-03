@@ -21,7 +21,7 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 	private static final long serialVersionUID = 6159860992107728108L;
 	
 	private boolean firstShrimp;
-	private ABC2Reaction reaction = new ABC2Reaction(true, 2500);
+	private final ABC2Reaction reaction = new ABC2Reaction(true, 2500);
 
 	@Override
 	public boolean execute()
@@ -29,7 +29,7 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 		if(FCTutorial.getProgress() == 90)
 		{
 			firstShrimp = true;
-			boolean success = getInteractable().execute();
+			final boolean success = getInteractable().execute();
 			reaction.start();
 			
 			if(success && Timing.waitCondition(FCConditions.animationChanged(-1), 6500)
@@ -43,7 +43,7 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 		}
 		
 		firstShrimp = false;
-		if(getInteractable().execute())
+		if(getInteractable().execute() && Timing.waitCondition(FCConditions.animationChanged(-1), 6500))
 		{
 			reaction.start();
 			return true;
@@ -57,6 +57,9 @@ public class CookShrimps extends AnticipativeTask implements PredictableInteract
 	{
 		final int SETTING = FCTutorial.getProgress();
 		final int SHRIMPS = Inventory.getCount("Raw shrimps");
+		if(Player.getAnimation() != -1)
+			return false;
+		
 		return (SETTING == 90 && SHRIMPS >= 2) || (SETTING == 110 && SHRIMPS >= 1);
 	}
 

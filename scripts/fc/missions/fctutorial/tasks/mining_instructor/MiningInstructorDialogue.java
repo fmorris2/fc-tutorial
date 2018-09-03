@@ -13,6 +13,7 @@ import scripts.fc.framework.task.PredictableInteraction;
 import scripts.fc.framework.task.Task;
 import scripts.fc.missions.fctutorial.FCTutorial;
 import scripts.fc.missions.fctutorial.tasks.TutorialTask;
+import scripts.fc.missions.fctutorial.tasks.quest_guide.QuestGuideLadder;
 
 public class MiningInstructorDialogue extends AnticipativeTask implements PredictableInteraction
 {
@@ -25,7 +26,10 @@ public class MiningInstructorDialogue extends AnticipativeTask implements Predic
 	@Override
 	public boolean execute()
 	{
-		if(Player.getPosition().distanceTo(TARGET_TILE) > DISTANCE_THRESHOLD)
+		if(QuestGuideLadder.NEAR_LADDER.contains(Player.getPosition())) {
+			TutorialTask.QUEST_GUIDE_LADDER.TASK.execute();
+		}
+		else if(Player.getPosition().distanceTo(TARGET_TILE) > DISTANCE_THRESHOLD)
 		{
 			walkingToInstructor = true;
 			new DPathNavigator().traverse(TARGET_TILE);

@@ -1,6 +1,8 @@
 package scripts.fc.missions.fctutorial.tasks.quest_guide;
 
 import org.tribot.api.Timing;
+import org.tribot.api2007.types.RSArea;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.fc.api.abc.ABC2Reaction;
 import scripts.fc.api.generic.FCConditions;
@@ -10,9 +12,11 @@ import scripts.fc.missions.fctutorial.FCTutorial;
 
 public class QuestGuideLadder extends Task
 {
+	public static final RSArea NEAR_LADDER = new RSArea(new RSTile(3088,3120, 0), 10);
+	
 	private static final long serialVersionUID = -1878757915046483345L;
 
-	private ABC2Reaction reaction = new ABC2Reaction(true, 2400);
+	private final ABC2Reaction reaction = new ABC2Reaction(true, 2400);
 	
 	@Override
 	public boolean execute()
