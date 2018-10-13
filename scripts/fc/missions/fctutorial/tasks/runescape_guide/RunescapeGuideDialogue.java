@@ -17,7 +17,7 @@ public class RunescapeGuideDialogue extends AnticipativeTask
 	@Override
 	public boolean execute()
 	{
-		return new NpcDialogue("Talk-to", "Runescape Guide", 15, General.random(0, 2)).execute();
+		return new NpcDialogue("Talk-to", "Gielinor Guide", 15, General.random(0, 2)).execute();
 	}
 
 	@Override

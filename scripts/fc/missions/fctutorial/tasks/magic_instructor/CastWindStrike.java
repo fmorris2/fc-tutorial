@@ -35,16 +35,16 @@ public class CastWindStrike extends AnticipativeTask
 	));
 	
 	private static final int MAGIC_INTER_MASTER = 218;
-	private static final int SPELL_CHILD = 2;
+	private static final int SPELL_CHILD = 5;
 	
-	private ABC2Reaction reaction = new ABC2Reaction(true, 2000);
+	private final ABC2Reaction reaction = new ABC2Reaction(true, 2000);
 
 	@Override
 	public boolean execute()
 	{
 		if(!CAST_TILES.contains(Player.getPosition()))
 		{
-			RSTile t = CAST_TILES.get(General.random(0, CAST_TILES.size() - 1));
+			final RSTile t = CAST_TILES.get(General.random(0, CAST_TILES.size() - 1));
 			
 			if(!t.isOnScreen())
 				Camera.turnToTile(t);
@@ -69,7 +69,7 @@ public class CastWindStrike extends AnticipativeTask
 			{
 				if(GameTab.open(TABS.MAGIC))
 				{
-					RSInterface inter = Interfaces.get(MAGIC_INTER_MASTER, SPELL_CHILD);
+					final RSInterface inter = Interfaces.get(MAGIC_INTER_MASTER, SPELL_CHILD);
 					
 					if(inter != null)
 						Clicking.click(inter);
